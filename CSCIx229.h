@@ -66,6 +66,8 @@ float base(scale S, rotate R, translate T);
 float octagonal_prism(scale S, rotate R);
 float beveled_cylinder(scale S, rotate R);
 float disk(scale S, rotate R);
+float beveled_cube(scale S, translate T);
+float gate(scale S, rotate R, translate T);
 
 #ifdef __cplusplus
 }

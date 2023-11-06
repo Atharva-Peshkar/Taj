@@ -215,6 +215,49 @@ void display()
    beveled_cylinder(P,S);
    glPopMatrix();
 
+   // Tomb
+   scale X = {3,2.8,2.8};
+   translate Y = {0,0.18,0};
+   beveled_cube(X,Y);
+
+   //Gates of the tomb
+   scale F = {2,3.2,0.2};
+   rotate G = {0,0,0,0};
+   translate H = {0,0,0};
+
+   // Front Gate
+   glPushMatrix();
+   glTranslatef(0,0,0);
+   glTranslatef(0,0,2.76);
+   glTranslatef(0,2.1,0);
+   gate(F,G,H);
+   glPopMatrix();
+
+   // Back Gate
+   glPushMatrix();
+   glTranslatef(0,0,0);
+   glTranslatef(0,0,-2.76);
+   glTranslatef(0,2.1,0);
+   gate(F,G,H);
+   glPopMatrix();
+
+   // Right Gate
+   glPushMatrix();
+   glTranslatef(0,0,0);
+   glTranslatef(2.85,0,0);
+   glTranslatef(0,2.0,0);
+   glRotatef(90,0,1,0);
+   gate(F,G,H);
+   glPopMatrix();
+
+   // Left Gate
+   glPushMatrix();
+   glTranslatef(0,0,0);
+   glTranslatef(-2.85,0,0);
+   glTranslatef(0,2.0,0);
+   glRotatef(90,0,1,0);
+   gate(F,G,H);
+   glPopMatrix();
 
    // glPushMatrix();
    // glTranslatef(0,0,0);

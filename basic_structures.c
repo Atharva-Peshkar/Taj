@@ -99,3 +99,72 @@ float disk(scale S, rotate R)
    gluDeleteQuadric(quadratic);
    glPopMatrix();
 }
+
+// The body of the main tomb
+float beveled_cube(scale S, translate T)
+{
+   //  Vertex index list
+   const int N=48;
+   const unsigned char index[] =
+   {
+      0,8,9,1,
+      1,9,10,2,
+      2,10,11,3,
+      3,11,12,4,
+      4,12,13,5,
+      5,13,14,6,
+      6,14,15,7,
+      7,15,8,0,
+      0,1,2,3,4,5,6,7,
+      8,9,10,11,12,13,14,15
+   };
+   //  Vertex coordinates
+   const float xyz[] =
+   {
+      -0.6,1,-1,
+      0.6,1,-1,
+      1,1,-0.6,
+      1,1,0.6,
+      0.6,1,1,
+      -0.6,1,1,
+      -1,1,0.6,
+      -1,1,-0.6,
+      -0.6,0,-1,
+      0.6,0,-1,
+      1,0,-0.6,
+      1,0,0.6,
+      0.6,0,1,
+      -0.6,0,1,
+      -1,0,0.6,
+      -1,0,-0.6
+   };
+
+   //  Define vertexes
+   glVertexPointer(3,GL_FLOAT,0,xyz);
+   glEnableClientState(GL_VERTEX_ARRAY);
+   //  Draw the tomb
+   glPushMatrix();
+   glScalef(S.x,S.y,S.z);
+   glTranslatef(T.x,T.y,T.z);
+
+   glColor3f(0.4, 0.1, 0.56); // Set color
+
+
+   glDrawElements(GL_POLYGON,N,GL_UNSIGNED_BYTE,index);
+   glPopMatrix();
+   //  Disable vertex array
+   glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+// Gates of the Taj
+float gate(scale S, rotate R, translate T)
+{
+   glColor3f(0.69,0.23,0.45);
+   glPushMatrix();
+   glScaled(S.x,S.y,S.z); 
+   glRotatef(R.a,R.x,R.y,R.z);
+   glTranslatef(T.x,T.y,T.z);
+   glutSolidCube(1);
+   glPopMatrix();
+} 
+
