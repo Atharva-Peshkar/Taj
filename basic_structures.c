@@ -1,35 +1,96 @@
 #include "CSCIx229.h"
 
+void cube()
+{
+   glPushMatrix();
+   glColor3f(1,0,0);
+   glBegin(GL_QUADS);
+   glNormal3f( 0, 0, 1);
+   glTexCoord2f(0,0); glVertex3f(-1,-1, 1);
+   glTexCoord2f(1,0); glVertex3f(+1,-1, 1);
+   glTexCoord2f(1,1); glVertex3f(+1,+1, 1);
+   glTexCoord2f(0,1); glVertex3f(-1,+1, 1);
+   glEnd();
+   //  Back
+   glBegin(GL_QUADS);
+   glNormal3f( 0, 0,-1);
+   glTexCoord2f(0,0); glVertex3f(+1,-1,-1);
+   glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
+   glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
+   glTexCoord2f(0,1); glVertex3f(+1,+1,-1);
+   glEnd();
+   //  Right
+   glBegin(GL_QUADS);
+   glNormal3f(+1, 0, 0);
+   glTexCoord2f(0,0); glVertex3f(+1,-1,+1);
+   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
+   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
+   glTexCoord2f(0,1); glVertex3f(+1,+1,+1);
+   glEnd();
+   //  Left
+   glBegin(GL_QUADS);
+   glNormal3f(-1, 0, 0);
+   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
+   glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
+   glTexCoord2f(1,1); glVertex3f(-1,+1,+1);
+   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
+   glEnd();
+   //  Top
+   glBegin(GL_QUADS);
+   glNormal3f( 0,+1, 0);
+   glTexCoord2f(0,0); glVertex3f(-1,+1,+1);
+   glTexCoord2f(1,0); glVertex3f(+1,+1,+1);
+   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
+   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
+   glEnd();
+   //  Bottom
+   glBegin(GL_QUADS);
+   glNormal3f( 0,-1, 0);
+   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
+   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
+   glTexCoord2f(1,1); glVertex3f(+1,-1,+1);
+   glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
+   glEnd();
+   //  Undo transformations and textures
+
+   glPopMatrix();
+}
+
+
 // Base of the Taj Mahal
 float base(scale S, rotate R, translate T)
 {
+
    glColor3f(1, 0, 0);
    glPushMatrix();
    glScaled(S.x,S.y,S.z); 
    glRotatef(R.a,R.x,R.y,R.z);
    glTranslatef(T.x,T.y,T.z);
-   glutSolidCube(1);
+   cube();
    glPopMatrix();
 
    glColor3f(1, 0, 0);
    glPushMatrix();
-   glScaled(S.x/3,S.y,S.z/3);
-   glTranslatef(T.x,T.y,T.z+1.2);
-   glutSolidCube(1);
+   glScaled(S.x/3,S.y,S.z/9);
+   glTranslatef(T.x,T.y,T.z+9.7);
+   cube();
    glPopMatrix();
 } 
 
 float octagonal_prism(scale S, rotate R)
 {
    glPushMatrix();
-   // Draw a solid cylinder
-   GLUquadricObj* quadratic = gluNewQuadric();
-   gluQuadricNormals(quadratic, GLU_SMOOTH);
-   gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
 
    glScaled(S.x,S.y,S.z);
    glRotatef(-90,1.0f, 0.0f, 0.0f);
    glRotatef(R.a,R.x,R.y,R.z);
+
+   // Draw a solid cylinder
+   GLUquadricObj* quadratic = gluNewQuadric();
+   gluQuadricNormals(quadratic, GLU_SMOOTH);
+   gluQuadricTexture(quadratic,GLU_TRUE);
+   gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
+
    // glTranslatef(T.x,-T.z,T.y);
    // Draw a cylinder
    glColor3f(0.0, 0.6, 1.0); // Set cylinder color
@@ -38,9 +99,11 @@ float octagonal_prism(scale S, rotate R)
 
    glColor3f(0,1,0); // Set cylinder color
    // Draw the top and bottom discs to close the cylinder
-   gluQuadricOrientation(quadratic, GLU_INSIDE); // Set the orientation to inside
-   gluDisk(quadratic, 0.0, 1.0, 8,8); // Inner and outer radius for top disc
+   glPushMatrix();
    glTranslatef(0.0, 0.0, 2.0); // Move to the other end
+   gluDisk(quadratic, 0.0, 1.0, 8,8); // Inner and outer radius for top disc
+   glPopMatrix();
+   glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
    gluDisk(quadratic, 0.0, 1.0, 8,8); // Inner and outer radius for bottom disc
    gluDeleteQuadric(quadratic);
    glPopMatrix();
@@ -48,43 +111,55 @@ float octagonal_prism(scale S, rotate R)
 
 float beveled_cylinder(scale S, rotate R)
 {
+   float base_radius = 0.8;
+   float top_radius = 0.5;
+   float height = 11;
+   int slices = 80;
+   int stacks = 80;
    glPushMatrix();
-   // Draw a solid cylinder
-   GLUquadricObj* quadratic = gluNewQuadric();
-   gluQuadricNormals(quadratic, GLU_SMOOTH);
-   gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
 
    glScaled(S.x,S.y,S.z);
    glRotatef(-90,1.0f, 0.0f, 0.0f);
    glRotatef(R.a,R.x,R.y,R.z);
    // glTranslatef(T.x,-T.z,T.y);
+
+   // Draw a solid cylinder
+   GLUquadricObj* quadratic = gluNewQuadric();
+   gluQuadricNormals(quadratic, GLU_SMOOTH);
+   gluQuadricTexture(quadratic,GLU_TRUE);
+   gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
+
    // Draw a cylinder
    glColor3f(0.0, 0.6, 1.0); // Set cylinder color
 
-   gluCylinder(quadratic, 0.7, 0.4, 10, 80,80); // (base radius, top radius, height, slices, stacks)
+   gluCylinder(quadratic, base_radius, top_radius, height, slices, stacks); // (base radius, top radius, height, slices, stacks)
 
    glColor3f(0,1,0); // Set cylinder color
    // Draw the top and bottom discs to close the cylinder
-   gluQuadricOrientation(quadratic, GLU_INSIDE); // Set the orientation to inside
-   gluDisk(quadratic, 0.0, 0.7, 80,80); // Inner and outer radius for top disc
+   glPushMatrix();
+   gluDisk(quadratic, 0.0, base_radius, slices,stacks); // Inner and outer radius for top disc
    glTranslatef(0.0, 0.0, 10); // Move to the other end
-   gluDisk(quadratic, 0.0, 0.4, 80,80); // Inner and outer radius for bottom disc
+   glPopMatrix();
+   glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+   gluDisk(quadratic, 0.0, top_radius,slices, stacks); // Inner and outer radius for bottom disc
    gluDeleteQuadric(quadratic);
    glPopMatrix();
 }
 
 float disk(scale S, rotate R)
 {
-     glPushMatrix();
-   // Draw a solid cylinder
-   GLUquadricObj* quadratic = gluNewQuadric();
-   gluQuadricNormals(quadratic, GLU_SMOOTH);
-   gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
-
+   glPushMatrix();
    glScaled(S.x,S.y,S.z);
    glRotatef(-90,1.0f, 0.0f, 0.0f);
    glRotatef(R.a,R.x,R.y,R.z);
    // glTranslatef(T.x,-T.z,T.y);
+
+   // Draw a solid cylinder
+   GLUquadricObj* quadratic = gluNewQuadric();
+   gluQuadricNormals(quadratic, GLU_SMOOTH);
+   gluQuadricTexture(quadratic,GLU_TRUE);
+   gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
+
    // Draw a cylinder
    glColor3f(0.0, 0.6, 1.0); // Set cylinder color
 
@@ -92,9 +167,11 @@ float disk(scale S, rotate R)
 
    glColor3f(0,1,0); // Set cylinder color
    // Draw the top and bottom discs to close the cylinder
-   gluQuadricOrientation(quadratic, GLU_INSIDE); // Set the orientation to inside
+   glPushMatrix();
    gluDisk(quadratic, 0.0, 0.6, 80,80); // Inner and outer radius for top disc
    glTranslatef(0.0, 0.0, 0.2); // Move to the other end
+   glPopMatrix();
+   glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
    gluDisk(quadratic, 0.0, 0.6, 80,80); // Inner and outer radius for bottom disc
    gluDeleteQuadric(quadratic);
    glPopMatrix();
@@ -164,7 +241,42 @@ float gate(scale S, rotate R, translate T)
    glScaled(S.x,S.y,S.z); 
    glRotatef(R.a,R.x,R.y,R.z);
    glTranslatef(T.x,T.y,T.z);
-   glutSolidCube(1);
+   cube();
    glPopMatrix();
 } 
 
+float main_dome(scale S)
+{
+   float height = 1.4;
+   float radius = 1.5;
+   float sphere_rad = 1.65;
+   glPushMatrix();
+
+   glScaled(S.x,S.y,S.z);
+   glRotatef(-90,1.0f, 0.0f, 0.0f);
+   // Draw a solid cylinder
+   GLUquadricObj* quadratic = gluNewQuadric();
+   gluQuadricNormals(quadratic, GLU_SMOOTH);
+   gluQuadricTexture(quadratic,GLU_TRUE);
+   gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
+
+   glColor3f(0.0, 0.6, 1.0); // Set cylinder color
+   gluCylinder(quadratic, radius,radius, height, 80,80); // (base radius, top radius, height, slices, stacks)
+
+   glColor3f(0,1,0); // Set cylinder color
+   // Draw the top and bottom discs to close the cylinder
+   glPushMatrix();
+   gluDisk(quadratic, 0.0, radius, 80,80); // Inner and outer radius for top disc
+   glPopMatrix();
+
+   glTranslatef(0.0, 0.0, height+0.5); // Move to the other end
+
+   gluSphere(quadratic,sphere_rad,80,10);
+
+   glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+   gluDisk(quadratic, 0.0, radius, 80,80); // Inner and outer radius for bottom disc
+
+   gluDeleteQuadric(quadratic);
+   glPopMatrix();
+
+} 

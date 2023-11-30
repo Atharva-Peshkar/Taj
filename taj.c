@@ -42,6 +42,8 @@ int fov=55;       //  Field of view (for perspective)
 double asp=1;     //  Aspect ratio
 double dim=5;     //  Size of world
 double rep=1;  //  Repetition
+unsigned int texture[7]; // Texture names
+int minaret_disk, minaret_tent, tomb_spire, tomb_tent;          //  Object display list
 
 typedef struct {float x,y,z;} vtx;
 #define n 500
@@ -140,13 +142,20 @@ void display()
    }
 
    // Base of the Taj Mahal
-   scale A = {9,0.6,9};
+   scale A = {4.5,0.3,4.5};
    rotate B = {0,0,0,0};
    translate C = {0,0,0};
+
+   //  Enable textures
+   // glEnable(GL_TEXTURE_2D);
+   // glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
+   // glBindTexture(GL_TEXTURE_2D,texture[0]);
+
+   // glBindTexture(GL_TEXTURE_2D,texture[0]);
    base(A,B,C);
 
-   // Base for the Minarets
-   // Front Right Minaret Base
+   // // Base for the Minarets
+   // // Front Right Minaret Base
    scale P = {0.32,0.32,0.32};
    rotate Q = {-25,0,0,1};
    glPushMatrix();
@@ -215,13 +224,15 @@ void display()
    beveled_cylinder(P,S);
    glPopMatrix();
 
+   // glDisable(GL_TEXTURE_2D);
+
    // Tomb
    scale X = {3,2.8,2.8};
    translate Y = {0,0.18,0};
    beveled_cube(X,Y);
 
    //Gates of the tomb
-   scale F = {2,3.2,0.2};
+   scale F = {1,1.7,0.06};
    rotate G = {0,0,0,0};
    translate H = {0,0,0};
 
@@ -244,27 +255,202 @@ void display()
    // Right Gate
    glPushMatrix();
    glTranslatef(0,0,0);
-   glTranslatef(2.85,0,0);
-   glTranslatef(0,2.0,0);
+   glTranslatef(2.96,0,0);
+   glTranslatef(0,2.1,0);
    glRotatef(90,0,1,0);
    gate(F,G,H);
    glPopMatrix();
 
-   // Left Gate
+   // // Left Gate
    glPushMatrix();
    glTranslatef(0,0,0);
-   glTranslatef(-2.85,0,0);
-   glTranslatef(0,2.0,0);
+   glTranslatef(-2.96,0,0);
+   glTranslatef(0,2.1,0);
    glRotatef(90,0,1,0);
    gate(F,G,H);
    glPopMatrix();
 
-   // glPushMatrix();
+
+   // Main dome
+   // glEnable(GL_TEXTURE_2D);
+   // glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
+   // glBindTexture(GL_TEXTURE_2D,texture[0]);
+
+   scale K = {0.7,0.7,0.7};
+   
+   glPushMatrix();
+   glTranslatef(0,3.32,0);
    // glTranslatef(0,0,0);
    // glTranslatef(0,0,0);
-   // glTranslatef(0,0,0);
-   // disk(P,S);
-   // glPopMatrix();
+   main_dome(K);
+   glPopMatrix();
+
+   // glDisable(GL_TEXTURE_2D);
+   // Draw all the loaded objects
+
+   //  Enable textures
+   // glEnable(GL_TEXTURE_2D);
+   // glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
+
+   // Tomb lotus spire
+   glColor3f(0.78,0.45,0.89);
+   glPushMatrix();
+   glScaled(1.6,1.6,1.6);
+   glTranslatef(0,0,0);
+   glTranslatef(0,0,0);
+   glTranslatef(0,3.6,0);
+   glCallList(tomb_spire);
+   glPopMatrix();
+
+   // Front right minaret Disks
+   glPushMatrix();
+   glScaled(0.38,0.38,0.38);
+   glTranslatef(11.6,0,0);
+   glTranslatef(0,0,11.75);
+   glTranslatef(0,3.6,0);
+   glCallList(minaret_disk);
+   glPopMatrix();
+
+   glPushMatrix();
+   glScaled(0.34,0.34,0.34);
+   glTranslatef(12.8,0,0);
+   glTranslatef(0,0,13.2);
+   glTranslatef(0,7,0);
+   glCallList(minaret_disk);
+   glPopMatrix();
+
+   // Back left minaret Disks
+   glPushMatrix();
+   glScaled(0.38,0.38,0.38);
+   glTranslatef(-11.6,0,0);
+   glTranslatef(0,0,-11.75);
+   glTranslatef(0,3.6,0);
+   glCallList(minaret_disk);
+   glPopMatrix();
+
+   glPushMatrix();
+   glScaled(0.34,0.34,0.34);
+   glTranslatef(-12.8,0,0);
+   glTranslatef(0,0,-13.2);
+   glTranslatef(0,7,0);
+   glCallList(minaret_disk);
+   glPopMatrix();
+
+   // Back right minaret Disks
+   glPushMatrix();
+   glScaled(0.38,0.38,0.38);
+   glTranslatef(11.6,0,0);
+   glTranslatef(0,0,-11.75);
+   glTranslatef(0,3.6,0);
+   glCallList(minaret_disk);
+   glPopMatrix();
+
+   glPushMatrix();
+   glScaled(0.34,0.34,0.34);
+   glTranslatef(12.8,0,0);
+   glTranslatef(0,0,-13.2);
+   glTranslatef(0,7,0);
+   glCallList(minaret_disk);
+   glPopMatrix();
+
+   // Front left minaret Disks
+   glPushMatrix();
+   glScaled(0.38,0.38,0.38);
+   glTranslatef(-11.6,0,0);
+   glTranslatef(0,0,11.75);
+   glTranslatef(0,3.6,0);
+   glCallList(minaret_disk);
+   glPopMatrix();
+
+   glPushMatrix();
+   glScaled(0.34,0.34,0.34);
+   glTranslatef(-12.8,0,0);
+   glTranslatef(0,0,13.2);
+   glTranslatef(0,7,0);
+   glCallList(minaret_disk);
+   glPopMatrix();
+
+   // Front right minaret tent
+   glPushMatrix();
+   glScaled(0.32,0.32,0.32);
+   glTranslatef(13.38,0,0);
+   glTranslatef(0,0,14.1);
+   glTranslatef(0,13.18,0);
+   glCallList(minaret_tent);
+   glPopMatrix();
+
+   // Back left minaret tent
+   glPushMatrix();
+   glScaled(0.32,0.32,0.32);
+   glTranslatef(-13.38,0,0);
+   glTranslatef(0,0,-14.1);
+   glTranslatef(0,13.18,0);
+   glCallList(minaret_tent);
+   glPopMatrix();
+
+   // Back right minaret tent
+   glPushMatrix();
+   glScaled(0.32,0.32,0.32);
+   glTranslatef(13.38,0,0);
+   glTranslatef(0,0,-14.1);
+   glTranslatef(0,13.18,0);
+   glCallList(minaret_tent);
+   glPopMatrix();
+
+   // Front left minaret tent
+   glPushMatrix();
+   glScaled(0.32,0.32,0.32);
+   glTranslatef(-13.38,0,0);
+   glTranslatef(0,0,14.1);
+   glTranslatef(0,13.18,0);
+   glCallList(minaret_tent);
+   glPopMatrix();
+
+   // Tomb tents
+
+   //Front right tomb tent
+   glColor3f(0.76,0.89,0.19);
+   glPushMatrix();
+   glScaled(0.28,0.28,0.28);
+   glTranslatef(5.6,0,0);
+   glTranslatef(0,0,6);
+   glTranslatef(0,15.1,0);
+   glCallList(tomb_tent);
+   glPopMatrix();
+
+   //Back left tomb tent
+   glColor3f(0.76,0.89,0.19);
+   glPushMatrix();
+   glScaled(0.28,0.28,0.28);
+   glTranslatef(-5.6,0,0);
+   glTranslatef(0,0,-6);
+   glTranslatef(0,15.1,0);
+   glCallList(tomb_tent);
+   glPopMatrix();
+
+   //Back right tomb tent
+   glColor3f(0.76,0.89,0.19);
+   glPushMatrix();
+   glScaled(0.28,0.28,0.28);
+   glTranslatef(5.6,0,0);
+   glTranslatef(0,0,-6);
+   glTranslatef(0,15.1,0);
+   glCallList(tomb_tent);
+   glPopMatrix();
+
+   //Front left tomb tent
+   glColor3f(0.76,0.89,0.19);
+   glPushMatrix();
+   glScaled(0.28,0.28,0.28);
+   glTranslatef(-5.6,0,0);
+   glTranslatef(0,0,6);
+   glTranslatef(0,15.1,0);
+   glCallList(tomb_tent);
+   glPopMatrix();
+
+
+
+   // glDisable(GL_TEXTURE_2D);
 
    glColor3f(1,1,1);
    if (axes)
@@ -417,6 +603,17 @@ int main(int argc,char* argv[])
    glutSpecialFunc(special);
    glutKeyboardFunc(key);
    glutIdleFunc(idle);
+
+   //  Load textures
+   texture[0] = LoadTexBMP("marble_tiles.bmp");
+   texture[1] = LoadTexBMP("bronze_basecolor.bmp");
+   // texture[2] = LoadTexBMP("bronze_roughness.bmp");
+
+   // Load objects
+   minaret_disk = LoadOBJ("./minaret-disk-bl.obj");
+   minaret_tent = LoadOBJ("./minaret_tent_bl.obj");
+   tomb_spire = LoadOBJ("./tomb-simp-bl.obj");
+   tomb_tent = LoadOBJ("./tomb-tent.obj");
 
    glutTimerFunc(0,timer,0);
    //  Pass control to GLUT so it can interact with the user
