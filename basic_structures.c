@@ -91,7 +91,6 @@ float octagonal_prism(scale S, rotate R)
    gluQuadricTexture(quadratic,GLU_TRUE);
    gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
 
-   // glTranslatef(T.x,-T.z,T.y);
    // Draw a cylinder
    glColor3f(0.0, 0.6, 1.0); // Set cylinder color
 
@@ -121,7 +120,6 @@ float beveled_cylinder(scale S, rotate R)
    glScaled(S.x,S.y,S.z);
    glRotatef(-90,1.0f, 0.0f, 0.0f);
    glRotatef(R.a,R.x,R.y,R.z);
-   // glTranslatef(T.x,-T.z,T.y);
 
    // Draw a solid cylinder
    GLUquadricObj* quadratic = gluNewQuadric();
@@ -152,7 +150,6 @@ float disk(scale S, rotate R)
    glScaled(S.x,S.y,S.z);
    glRotatef(-90,1.0f, 0.0f, 0.0f);
    glRotatef(R.a,R.x,R.y,R.z);
-   // glTranslatef(T.x,-T.z,T.y);
 
    // Draw a solid cylinder
    GLUquadricObj* quadratic = gluNewQuadric();

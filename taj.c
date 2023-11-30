@@ -1,10 +1,12 @@
 /*
- *  Homework 6: Lighting and Textures
+ *  Final Project: The Taj Mahal
  *  Submitted by - Atharva R. Peshkar
  *
  *  References
- *  1) Ex 13, 14, 15
- *  2) StackOverflow
+ *  1) Course examples
+ *  2) My homework submission
+ *  3) Documentation
+ *  4) Stack Overflow
  * 
  *
  *  Key bindings:
@@ -36,83 +38,18 @@
 int axes=1;       //  Display axes
 int mode=1;       //  Projection mode
 int move=1;       //  Move light
-int th=-40;         //  Azimuth of view angle
+int th=0;         //  Azimuth of view angle
 int ph=40;         //  Elevation of view angle
-int fov=55;       //  Field of view (for perspective)
+int fov=102;       //  Field of view (for perspective)
 double asp=1;     //  Aspect ratio
 double dim=5;     //  Size of world
 double rep=1;  //  Repetition
-unsigned int texture[7]; // Texture names
+unsigned int texture[3]; // Texture names
 int minaret_disk, minaret_tent, tomb_spire, tomb_tent;          //  Object display list
 
 typedef struct {float x,y,z;} vtx;
 #define n 500
 vtx is[n];
-
-// static void pentagon(vtx A,vtx B,vtx C,vtx D,vtx E)
-// {
-//    //  Planar vector 0
-//    float dx0 = A.x-C.x;
-//    float dy0 = A.y-C.y;
-//    float dz0 = A.z-C.z;
-
-//     float dx1 = A.x-D.x;
-//     float dy1 = A.y-D.y;
-//     float dz1 = A.z-D.z;
-//    //  Normal
-//    float Nx = dy0*dz1 - dy1*dz0;
-//    float Ny = dz0*dx1 - dz1*dx0;
-//    float Nz = dx0*dy1 - dx1*dy0;
-    
-//    //  Draw pentagon
-//    glNormal3f(Nx,Ny,Nz);
-//    glBegin(GL_POLYGON);
-//    glTexCoord2f(0.5, 1.0); glVertex3f(A.x,A.y,A.z);
-//    glTexCoord2f(0.8, 1.0); glVertex3f(B.x,B.y,B.z);
-//    glTexCoord2f(1.0, 0.0); glVertex3f(C.x,C.y,C.z);
-//    glTexCoord2f(0.0, 0.0); glVertex3f(D.x,D.y,D.z);
-//    glTexCoord2f(0.2, 1.0); glVertex3f(E.x,E.y,E.z);
-//    glEnd();
-// }
-
-// /*
-//  *  Draw dodecahedron
-//  *     at (x,y,z)
-//  *     size  s
-//  *     rotated th about the x axis
-//  */
-// static void dodecahedron(float x,float y,float z,float s,float th)
-// {
-//    GLfloat ambient[] = { 0.05, 0.05, 0.05, 1.0 };
-//    GLfloat diffuse[] = { 0.8, 0.8, 0.8, 0.5 };
-//    GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
-//    GLfloat emission[] = { 0.0, 0.0, 0.0, 1.0 };
-//    GLfloat shininess = 100.0;
-
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-//    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, emission);
-//    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
-
-//    //  Draw dodecahedron
-//    glPushMatrix();
-//    glTranslatef(x,y,z);
-//    glScalef(s,s,s);
-//    glRotatef(th,0,1,0);
-//    glRotatef(55,1,0,0);
-//    // //  Enable textures
-//    // glEnable(GL_TEXTURE_2D);
-//    // glTexEnvi(GL_TEXTURE_ENV , GL_TEXTURE_ENV_MODE , GL_MODULATE);
-//    // glBindTexture(GL_TEXTURE_2D,texture[0]);
-//    for (int i=0;i<Do_N;i++)
-//    {
-//       pentagon(xyz_dodec[idx_dodec[i].A],xyz_dodec[idx_dodec[i].B],xyz_dodec[idx_dodec[i].C],
-//                xyz_dodec[idx_dodec[i].D],xyz_dodec[idx_dodec[i].E]);
-//    }
-     
-//    glPopMatrix();
-// }
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -538,8 +475,9 @@ void key(unsigned char ch,int x,int y)
    //  Reset view angle
    else if (ch == '0')
    {
-      th = -40;
+      th = 0;
       ph = 40;
+      fov = 102;
    }
    //  Toggle axes
    else if (ch == 'x' || ch == 'X')
@@ -554,8 +492,8 @@ void key(unsigned char ch,int x,int y)
       fov++;
    //  Reproject
    Project(mode?fov:0,asp,dim);
-   //  Animate if requested
-   glutIdleFunc(move?idle:NULL);
+   // //  Animate if requested
+   // glutIdleFunc(move?idle:NULL);
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
