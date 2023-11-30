@@ -62,15 +62,14 @@ void Project(double fov,double asp,double dim);
 void ErrCheck(const char* where);
 int  LoadOBJ(const char* file);
 
-float base(scale S, rotate R, translate T);
-float octagonal_prism(scale S, rotate R);
-float beveled_cylinder(scale S, rotate R);
-float disk(scale S, rotate R);
-float beveled_cube(scale S, translate T);
-float gate(scale S, rotate R, translate T);
+void base(scale S, rotate R, translate T);
+void octagonal_prism(scale S, rotate R);
+void beveled_cylinder(scale S, rotate R);
+void beveled_cube(scale S, translate T);
+void gate(scale S, rotate R, translate T);
 void cube();
-float main_dome(scale S);
-float dome(scale S);
+void main_dome(scale S);
+void dome(scale S);
 
 #ifdef __cplusplus
 }

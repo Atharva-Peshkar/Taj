@@ -1,0 +1,46 @@
+Final Project - The Taj Mahal
+
+Atharva R. Peshkar
+CSCI4229/5229 Fall 2023
+
+Running the program
+make
+./taj
+
+Key Bindings - 
+p          Toggles ortogonal/perspective projection
++/-        Change field of view of perspective
+x          Toggle axes
+arrows     Change view angle
+PgDn/PgUp  Zoom in and out
+0          Reset view angle
+ESC        Exit
+
+
+What is remaining?
+1) Adding some decorative elements to the tomb.
+2) Adding a few remaining textures - Doors and Tomb.
+3) Adding lighting.
+
+Note - A few textures have been added. To see them uncomment lines 66-68, 195-197 and lines 146 & 363 in the "taj.c" file.
+
+References
+1) Course examples
+2) My homework submission
+3) Documentation
+4) Stack Overflow
+
+**********************************************************
+
+Fun facts - 
+
+*) The Taj Mahal was built in 1648 and was declared a winner of the New 7 Wonders of the World (2000–2007) initiative.
+
+*) The minarets of the Taj Mahal are one of its most distinctive features. They are four slender towers that are evenly spaced around the main dome of the mausoleum. The minarets are also slightly tilted outward, which is an intentional design feature. 
+
+There are several reasons why the minarets of the Taj Mahal are leaning outward.
+1) The minarets are not attached to the main structure of the mausoleum. They are set back from the main building and are only attached at the base. This was done intentionally so that if the minarets were to ever collapse, they would fall away from the Taj Mahal and not damage the main structure. 
+
+2) The minarets are slightly tilted so that they appear to be leaning when viewed from the ground. This was done to create an optical illusion and make the minarets appear taller than they actually are. 
+
+3) The minarets are made of lighter materials than the rest of the Taj Mahal. This was done to keep the minarets from being too heavy and putting too much stress on the structure

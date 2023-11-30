@@ -10,21 +10,7 @@
  * 
  *
  *  Key bindings:
- *  l          Toggles lighting
- *  a/A        Decrease/increase ambient light
- *  d/D        Decrease/increase diffuse light
- *  s/S        Decrease/increase specular light
- *  e/E        Decrease/increase emitted light
- *  n/N        Decrease/increase shininess
- *  F1         Toggle smooth/flat shading
- *  F2         Toggle local viewer mode
- *  F3         Toggle light distance (1/5)
- *  F8         Change ball increment
- *  F9         Invert bottom normal
- *  m          Toggles light movement
- *  []         Lower/rise light
  *  p          Toggles ortogonal/perspective projection
- *  o          Cycles through objects
  *  +/-        Change field of view of perspective
  *  x          Toggle axes
  *  arrows     Change view angle
@@ -37,13 +23,11 @@
 
 int axes=1;       //  Display axes
 int mode=1;       //  Projection mode
-int move=1;       //  Move light
 int th=0;         //  Azimuth of view angle
-int ph=40;         //  Elevation of view angle
+int ph=45;         //  Elevation of view angle
 int fov=102;       //  Field of view (for perspective)
 double asp=1;     //  Aspect ratio
 double dim=5;     //  Size of world
-double rep=1;  //  Repetition
 unsigned int texture[3]; // Texture names
 int minaret_disk, minaret_tent, tomb_spire, tomb_tent;          //  Object display list
 
@@ -78,17 +62,15 @@ void display()
       glRotatef(th,0,1,0);
    }
 
-   // Base of the Taj Mahal
-   scale A = {4.5,0.3,4.5};
-   rotate B = {0,0,0,0};
-   translate C = {0,0,0};
-
    //  Enable textures
    // glEnable(GL_TEXTURE_2D);
    // glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
    // glBindTexture(GL_TEXTURE_2D,texture[0]);
 
-   // glBindTexture(GL_TEXTURE_2D,texture[0]);
+   // Base of the Taj Mahal
+   scale A = {4.5,0.3,4.5};
+   rotate B = {0,0,0,0};
+   translate C = {0,0,0};
    base(A,B,C);
 
    // // Base for the Minarets
@@ -163,6 +145,7 @@ void display()
 
    // glDisable(GL_TEXTURE_2D);
 
+
    // Tomb
    scale X = {3,2.8,2.8};
    translate Y = {0,0.18,0};
@@ -175,6 +158,7 @@ void display()
 
    // Front Gate
    glPushMatrix();
+   glColor3f(0.87,0.34,0.67);
    glTranslatef(0,0,0);
    glTranslatef(0,0,2.76);
    glTranslatef(0,2.1,0);
@@ -207,7 +191,6 @@ void display()
    gate(F,G,H);
    glPopMatrix();
 
-
    // Main dome
    // glEnable(GL_TEXTURE_2D);
    // glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
@@ -217,18 +200,10 @@ void display()
    
    glPushMatrix();
    glTranslatef(0,3.32,0);
-   // glTranslatef(0,0,0);
-   // glTranslatef(0,0,0);
    main_dome(K);
    glPopMatrix();
 
-   // glDisable(GL_TEXTURE_2D);
    // Draw all the loaded objects
-
-   //  Enable textures
-   // glEnable(GL_TEXTURE_2D);
-   // glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
-
    // Tomb lotus spire
    glColor3f(0.78,0.45,0.89);
    glPushMatrix();
@@ -385,8 +360,6 @@ void display()
    glCallList(tomb_tent);
    glPopMatrix();
 
-
-
    // glDisable(GL_TEXTURE_2D);
 
    glColor3f(1,1,1);
@@ -413,23 +386,12 @@ void display()
    //  Display parameters
    glWindowPos2i(5,5);
    Print("Angle=%d,%d  Dim=%.1f FOV=%d Projection=%s",
-     th,ph,dim,fov,mode?"Perpective":"Orthogonal");
+     th,ph,dim,fov,mode?"Perspective":"Orthogonal");
 
    //  Render the scene and make it visible
    ErrCheck("display");
    glFlush();
    glutSwapBuffers();
-}
-
-/*
- *  GLUT calls this routine when the window is resized
- */
-void idle()
-{
-   //  Elapsed time in seconds
-   double t = glutGet(GLUT_ELAPSED_TIME)/1000.0;
-   //  Tell GLUT it is necessary to redisplay the scene
-   glutPostRedisplay();
 }
 
 /*
@@ -476,7 +438,7 @@ void key(unsigned char ch,int x,int y)
    else if (ch == '0')
    {
       th = 0;
-      ph = 40;
+      ph = 45;
       fov = 102;
    }
    //  Toggle axes
@@ -530,7 +492,7 @@ int main(int argc,char* argv[])
    //  Request double buffered, true color window with Z buffering at 600x600
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    glutInitWindowSize(800,800);
-   glutCreateWindow("Taj - Atharva R. Peshkar");
+   glutCreateWindow("The Taj Mahal - Atharva R. Peshkar");
 #ifdef USEGLEW
    //  Initialize GLEW
    if (glewInit()!=GLEW_OK) Fatal("Error initializing GLEW\n");
@@ -540,14 +502,12 @@ int main(int argc,char* argv[])
    glutReshapeFunc(reshape);
    glutSpecialFunc(special);
    glutKeyboardFunc(key);
-   glutIdleFunc(idle);
 
    //  Load textures
    texture[0] = LoadTexBMP("marble_tiles.bmp");
    texture[1] = LoadTexBMP("bronze_basecolor.bmp");
-   // texture[2] = LoadTexBMP("bronze_roughness.bmp");
 
-   // Load objects
+   // Load Blender objects
    minaret_disk = LoadOBJ("./minaret-disk-bl.obj");
    minaret_tent = LoadOBJ("./minaret_tent_bl.obj");
    tomb_spire = LoadOBJ("./tomb-simp-bl.obj");

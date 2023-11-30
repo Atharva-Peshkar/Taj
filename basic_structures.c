@@ -3,7 +3,6 @@
 void cube()
 {
    glPushMatrix();
-   glColor3f(1,0,0);
    glBegin(GL_QUADS);
    glNormal3f( 0, 0, 1);
    glTexCoord2f(0,0); glVertex3f(-1,-1, 1);
@@ -52,13 +51,12 @@ void cube()
    glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
    glEnd();
    //  Undo transformations and textures
-
    glPopMatrix();
 }
 
 
 // Base of the Taj Mahal
-float base(scale S, rotate R, translate T)
+void base(scale S, rotate R, translate T)
 {
 
    glColor3f(1, 0, 0);
@@ -77,7 +75,7 @@ float base(scale S, rotate R, translate T)
    glPopMatrix();
 } 
 
-float octagonal_prism(scale S, rotate R)
+void octagonal_prism(scale S, rotate R)
 {
    glPushMatrix();
 
@@ -108,7 +106,7 @@ float octagonal_prism(scale S, rotate R)
    glPopMatrix();
 }
 
-float beveled_cylinder(scale S, rotate R)
+void beveled_cylinder(scale S, rotate R)
 {
    float base_radius = 0.8;
    float top_radius = 0.5;
@@ -144,38 +142,8 @@ float beveled_cylinder(scale S, rotate R)
    glPopMatrix();
 }
 
-float disk(scale S, rotate R)
-{
-   glPushMatrix();
-   glScaled(S.x,S.y,S.z);
-   glRotatef(-90,1.0f, 0.0f, 0.0f);
-   glRotatef(R.a,R.x,R.y,R.z);
-
-   // Draw a solid cylinder
-   GLUquadricObj* quadratic = gluNewQuadric();
-   gluQuadricNormals(quadratic, GLU_SMOOTH);
-   gluQuadricTexture(quadratic,GLU_TRUE);
-   gluQuadricOrientation(quadratic, GLU_OUTSIDE); // Set the orientation to outside
-
-   // Draw a cylinder
-   glColor3f(0.0, 0.6, 1.0); // Set cylinder color
-
-   gluCylinder(quadratic, 0.6, 0.6, 0.2, 80,80); // (base radius, top radius, height, slices, stacks)
-
-   glColor3f(0,1,0); // Set cylinder color
-   // Draw the top and bottom discs to close the cylinder
-   glPushMatrix();
-   gluDisk(quadratic, 0.0, 0.6, 80,80); // Inner and outer radius for top disc
-   glTranslatef(0.0, 0.0, 0.2); // Move to the other end
-   glPopMatrix();
-   glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-   gluDisk(quadratic, 0.0, 0.6, 80,80); // Inner and outer radius for bottom disc
-   gluDeleteQuadric(quadratic);
-   glPopMatrix();
-}
-
 // The body of the main tomb
-float beveled_cube(scale S, translate T)
+void beveled_cube(scale S, translate T)
 {
    //  Vertex index list
    const int N=48;
@@ -231,7 +199,7 @@ float beveled_cube(scale S, translate T)
 }
 
 // Gates of the Taj
-float gate(scale S, rotate R, translate T)
+void gate(scale S, rotate R, translate T)
 {
    glColor3f(0.69,0.23,0.45);
    glPushMatrix();
@@ -242,7 +210,7 @@ float gate(scale S, rotate R, translate T)
    glPopMatrix();
 } 
 
-float main_dome(scale S)
+void main_dome(scale S)
 {
    float height = 1.4;
    float radius = 1.5;
@@ -275,5 +243,4 @@ float main_dome(scale S)
 
    gluDeleteQuadric(quadratic);
    glPopMatrix();
-
 } 
